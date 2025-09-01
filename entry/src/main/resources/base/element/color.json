@@ -1,0 +1,44 @@
+{
+  "color": [
+    {
+      "name": "start_window_background",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "base_background_gradient_start",
+      "value": "#FF165937"
+    },
+    {
+      "name": "base_background_gradient_end",
+      "value": "#FF02160E"
+    },
+    {
+      "name": "carb_menu_item_color",
+      "value": "#FF02160E"
+    },
+    {
+      "name": "protein_menu_item_color",
+      "value": "#FF02160E"
+    },
+    {
+      "name": "fat_menu_item_color",
+      "value": "#FF02160E"
+    },
+    {
+      "name": "kcal_menu_item_color",
+      "value": "#FF02160E"
+    },
+    {
+      "name": "gauge",
+      "value": "#00C27A"
+    },
+    {
+      "name": "gradient_target_button_start",
+      "value": "#E63C3CE8"
+    },
+    {
+      "name": "gradient_target_button_end",
+      "value": "#E6111184"
+    }
+  ]
+}
