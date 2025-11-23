@@ -74,7 +74,7 @@ export struct SetMacroPage {
         TrackerService.instance().targetMacroModel.carbs = this.getProperValue(this.gaugeTargetValue);
         break;
       default:
-        console.log('Error');
+        console.info('Error');
         break;
     }
   }
@@ -151,7 +151,7 @@ export struct SetMacroPage {
             .linearGradient({
               direction: GradientDirection.Right,
               colors: [[Color.Grey, 0.0],
-                [Color.Grey, 1],]
+                [Color.Grey, 1]]
             })
             .borderRadius(6)
             .alignItems(VerticalAlign.Center)
@@ -194,7 +194,7 @@ export struct SetMacroPage {
     .linearGradient({
       direction: GradientDirection.Bottom,
       colors: [[$r('app.color.base_background_gradient_start'), 0.0],
-        [$r('app.color.base_background_gradient_end'), 1],]
+        [$r('app.color.base_background_gradient_end'), 1]]
     })
   }
 }
