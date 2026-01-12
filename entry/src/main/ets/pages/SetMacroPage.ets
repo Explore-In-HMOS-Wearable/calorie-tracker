@@ -5,14 +5,14 @@ import { TrackerService } from '../core/services/TrackerService';
 @Entry
 @Component
 export struct SetMacroPage {
-  @State context: UIContext = this.getUIContext()
+  context: UIContext = this.getUIContext()
   @State gaugeValue: number = 0;
   @State gaugeTargetValue: number = 0;
   @State showWarningText: boolean = false;
 
   aboutToAppear(): void {
 
-    if (NavigationService.getInstance().arg == 'Calorie') {
+    if (NavigationService.getInstance().arg === 'Calorie') {
       this.gaugeValue = this.getRelatedValue() / 100;
       this.gaugeTargetValue = this.getRelatedTargetValue() / 100;
     } else {
@@ -80,7 +80,7 @@ export struct SetMacroPage {
   }
 
   getProperValue(value: number): number {
-    if (NavigationService.getInstance().arg == 'Calorie') {
+    if (NavigationService.getInstance().arg === 'Calorie') {
       return (value * 100);
     } else {
       return (value * 10);

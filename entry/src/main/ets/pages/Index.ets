@@ -1,5 +1,3 @@
-import { ArcList, ArcListItem, ArcListAttribute, ArcListItemAttribute, ComponentContent } from '@kit.ArkUI';
-import { MacroModel } from '../core/models/MacroModel';
 import { NavigationService } from '../core/services/NavigationService';
 import { TrackerService } from '../core/services/TrackerService';
 import { HomePage } from './HomePage';
@@ -33,7 +31,7 @@ struct Index {
       RelativeContainer()
     }
     .onNavBarStateChange((e) => {
-      if (NavigationService.getInstance().pageInfos.getAllPathName().length == 0) {
+      if (NavigationService.getInstance().pageInfos.getAllPathName().length === 0) {
         NavigationService.getInstance().pageInfos.pushPath({ name: 'HomePage' });
       }
     })

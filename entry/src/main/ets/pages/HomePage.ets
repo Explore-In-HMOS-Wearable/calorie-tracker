@@ -17,19 +17,19 @@ export struct HomePage {
         .textAlign(TextAlign.End)
         .fontWeight(FontWeight.Bold)
         .textShadow({
-          radius: 0.01, // very thin
+          radius: 0.01,
           color: Color.Black,
           offsetX: 0,
           offsetY: 0
         })
         .lineHeight(18);
-      Text(currentMacro + ' / ' + target)
+      Text(`${currentMacro} / ${target}`)
         .fontSize($r(`app.float.menu_item_font_size`))
         .fontColor(Color.White)
         .textAlign(TextAlign.End)
         .fontWeight(FontWeight.Bold)
         .textShadow({
-          radius: 0.01, // very thin
+          radius: 0.01,
           color: Color.Black,
           offsetX: 0,
           offsetY: 0

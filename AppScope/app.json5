@@ -1,6 +1,6 @@
 {
   "app": {
-    "bundleName": "com.hmosdemos.calorietracker",
+    "bundleName": "com.hmosdemos.wearable.calorie_tracker",
     "vendor": "hmosdemos",
     "versionCode": 1000000,
     "versionName": "1.0.0",
