@@ -1,8 +1,9 @@
 import { NavigationService } from '../core/services/NavigationService';
 import { TrackerService } from '../core/services/TrackerService';
+import { common } from '@kit.AbilityKit';
 import { HomePage } from './HomePage';
 import { SetMacroPage } from './SetMacroPage';
-
+import { HistoryPage } from './HistoryPage';
 
 @Entry
 @Component
@@ -11,8 +12,11 @@ struct Index {
   context: UIContext = this.getUIContext();
 
   aboutToAppear(): void {
-    this.trackerService.setHeader(this.context);
-    NavigationService.getInstance().pageInfos.pushPath({ name: 'HomePage' });
+    this.trackerService.init(this.getUIContext().getHostContext() as common.Context).then(() => {
+      NavigationService.getInstance().pageInfos.pushPath({ name: 'HomePage' });
+    }).catch((e: Error) => {
+      console.error(`Failed to initialize Index: ${e.message}`);
+    });
   }
 
   @Builder
@@ -22,6 +26,8 @@ struct Index {
         HomePage();
       } else if (name === 'SetMacroPage') {
         SetMacroPage()
+      } else if (name === 'HistoryPage') {
+        HistoryPage()
       }
     }.hideTitleBar(true)
   }

@@ -1,23 +1,15 @@
 import { MacroModel } from '../models/MacroModel';
+import { HistoryRecord } from '../models/HistoryRecord';
 import { ComponentContent } from '@kit.ArkUI';
+import { PersistenceService } from './PersistenceService';
+import { common } from '@kit.AbilityKit';
 
-@Builder
-function buildText() {
-  Column() {
-    Text(TrackerService.instance().calculateTotalProgress().toFixed(2) + `% of total target`)
-      .fontSize('14fp')
-      .fontWeight(FontWeight.Bold)
-  }
-  .margin({ top: 40 })
-  .justifyContent(FlexAlign.Center)
-}
-
-@ObservedV2
+@Observed
 export class TrackerService {
-  @Trace currentMacroModel: MacroModel = new MacroModel();
-  @Trace targetMacroModel: MacroModel = new MacroModel(2000, 150, 150, 50);
+  currentMacroModel: MacroModel = new MacroModel();
+  targetMacroModel: MacroModel = new MacroModel(2000, 150, 150, 50);
+  history: HistoryRecord[] = [];
   static _instance: TrackerService;
-  header?: ComponentContent<Object>;
 
   static instance() {
     if (!TrackerService._instance) {
@@ -26,8 +18,60 @@ export class TrackerService {
     return TrackerService._instance;
   }
 
-  setHeader(context: UIContext) {
-    this.header = new ComponentContent(context, wrapBuilder(buildText));
+  async init(context: common.Context) {
+    try {
+      await PersistenceService.getInstance().init(context);
+      const savedCurrent = await PersistenceService.getInstance().loadCurrentMacros();
+      if (savedCurrent) {
+        this.currentMacroModel.kcal = savedCurrent.kcal;
+        this.currentMacroModel.carbs = savedCurrent.carbs;
+        this.currentMacroModel.protein = savedCurrent.protein;
+        this.currentMacroModel.fat = savedCurrent.fat;
+      }
+      const savedTarget = await PersistenceService.getInstance().loadTargetMacros();
+      if (savedTarget) {
+        this.targetMacroModel.kcal = savedTarget.kcal;
+        this.targetMacroModel.carbs = savedTarget.carbs;
+        this.targetMacroModel.protein = savedTarget.protein;
+        this.targetMacroModel.fat = savedTarget.fat;
+      }
+
+      const savedHistoryStr = await PersistenceService.getInstance().loadHistory();
+      this.history = JSON.parse(savedHistoryStr) as HistoryRecord[];
+
+      const lastDate = await PersistenceService.getInstance().loadLastDate();
+      const today = new Date().toDateString();
+      if (lastDate && lastDate !== today) {
+        // Roll over
+        this.history.unshift(new HistoryRecord(lastDate, new MacroModel(
+          this.currentMacroModel.kcal,
+          this.currentMacroModel.carbs,
+          this.currentMacroModel.protein,
+          this.currentMacroModel.fat
+        )));
+        if (this.history.length > 7) {
+          this.history = this.history.slice(0, 7);
+        }
+        this.currentMacroModel.kcal = 0;
+        this.currentMacroModel.carbs = 0;
+        this.currentMacroModel.protein = 0;
+        this.currentMacroModel.fat = 0;
+        await this.syncToPersistence();
+      }
+      await PersistenceService.getInstance().saveLastDate(today);
+    } catch (e) {
+      console.error('Failed to initialize TrackerService');
+    }
+  }
+
+  async syncToPersistence() {
+    try {
+      await PersistenceService.getInstance().saveCurrentMacros(this.currentMacroModel);
+      await PersistenceService.getInstance().saveTargetMacros(this.targetMacroModel);
+      await PersistenceService.getInstance().saveHistory(JSON.stringify(this.history));
+    } catch (e) {
+      console.error('Failed to sync to persistence');
+    }
   }
 
   calculateTotalProgress(): number {
